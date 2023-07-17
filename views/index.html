@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Appointment Booking</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f2f2f2;
+    }
+    
+    h2 {
+      color: #333;
+    }
+    
+    form {
+      max-width: 400px;
+      margin: 0 auto;
+      padding: 20px;
+      background-color: #fff;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+    
+    label {
+      display: block;
+      margin-bottom: 10px;
+      color: #555;
+    }
+    
+    input[type="text"],
+    input[type="tel"],
+    input[type="email"] {
+      width: 100%;
+      padding: 8px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      box-sizing: border-box;
+    }
+    
+    input[type="submit"] {
+      display: block;
+      width: 100%;
+      padding: 10px;
+      margin-top: 20px;
+      background-color: #4CAF50;
+      color: #fff;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    
+    input[type="submit"]:hover {
+      background-color: #45a049;
+    }
+    
+    .appointment-list {
+      margin-top: 20px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      padding: 10px;
+      background-color: #fff;
+    }
+    
+    .appointment-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+    
+    .appointment-item span {
+      flex-grow: 1;
+    }
+    
+    .appointment-item button {
+      margin-left: 10px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <h2>Appointment Booking Form</h2>
+  <form id="appointment-form" onsubmit="addAppointment(event)">
+    <label for="name">Name:</label>
+    <input type="text" id="name" name="name" required>
+    
+    <label for="phone">Phone Number:</label>
+    <input type="tel" id="phone" name="phone" required>
+    
+    <label for="email">Email:</label>
+    <input type="email" id="email" name="email" required>
+    
+    <input type="submit" value="Book Appointment">
+  </form>
+  
+  <div id="appointments" class="appointment-list">
+    <h3>Appointments</h3>
+  </div>
+
+  <script>
+    // Array to store appointments
+    let appointments = [];
+
+    // Function to add an appointment
+    function addAppointment(event) {
+      event.preventDefault();
+
+      // Get the form values
+      const name = document.getElementById('name').value;
+      const phone = document.getElementById('phone').value;
+      const email = document.getElementById('email').value;
+
+      // Create an appointment object
+      const appointment = {
+        name,
+        phone,
+        email
+      };
+
+      // Add the appointment to the array
+      appointments.push(appointment);
+
+      // Clear the form fields
+      document.getElementById('name').value = '';
+      document.getElementById('phone').value = '';
+      document.getElementById('email').value = '';
+
+      // Call function to display appointments
+      displayAppointments();
+    }
+
+    // Function to display appointments
+    function displayAppointments() {
+      const appointmentsContainer = document.getElementById('appointments');
+      appointmentsContainer.innerHTML = '';
+
+      if (appointments.length === 0) {
+        appointmentsContainer.innerHTML = '<h3>No Appointments</h3>';
+        return;
+      }
+
+      const appointmentsList = document.createElement('ul');
+
+      appointments.forEach((appointment, index) => {
+        const listItem = document.createElement('li');
+        listItem.classList.add('appointment-item');
+
+        const appointmentInfo = document.createElement('span');
+        appointmentInfo.innerText = `Name: ${appointment.name}, Phone: ${appointment.phone}, Email: ${appointment.email}`;
+
+        const editButton = document.createElement('button');
+        editButton.innerText = 'Edit';
+        editButton.setAttribute('onclick', `editAppointment(${index})`);
+
+        const deleteButton = document.createElement('button');
+        deleteButton.innerText = 'Delete';
+        deleteButton.setAttribute('onclick', `deleteAppointment(${index})`);
+
+        listItem.appendChild(appointmentInfo);
+        listItem.appendChild(editButton);
+        listItem.appendChild(deleteButton);
+
+        appointmentsList.appendChild(listItem);
+      });
+
+      appointmentsContainer.appendChild(appointmentsList);
+    }
+
+    // Function to delete an appointment
+    function deleteAppointment(index) {
+      appointments.splice(index, 1);
+      displayAppointments();
+    }
+
+    // Function to edit an appointment
+    function editAppointment(index) {
+      const appointment = appointments[index];
+      document.getElementById('name').value = appointment.name;
+      document.getElementById('phone').value = appointment.phone;
+      document.getElementById('email').value = appointment.email;
+
+      appointments.splice(index, 1);
+      displayAppointments();
+    }
+  </script>
+</body>
+</html>
