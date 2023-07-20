@@ -81,7 +81,7 @@
 </head>
 <body>
   <h2>Appointment Booking Form</h2>
-  <form id="appointment-form" onsubmit="addAppointment(event)">
+  <form id="form" >
     <label for="name">Name:</label>
     <input type="text" id="name" name="name" required>
     
@@ -91,98 +91,15 @@
     <label for="email">Email:</label>
     <input type="email" id="email" name="email" required>
     
+    <input type="hidden" id="id" name="id" ><br><br>
     <input type="submit" value="Book Appointment">
   </form>
-  
   <div id="appointments" class="appointment-list">
     <h3>Appointments</h3>
+    <ul  id="users"> </ul>
   </div>
+<script src="script.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.2.2/axios.min.js"></script>
 
-  <script>
-    // Array to store appointments
-    let appointments = [];
-
-    // Function to add an appointment
-    function addAppointment(event) {
-      event.preventDefault();
-
-      // Get the form values
-      const name = document.getElementById('name').value;
-      const phone = document.getElementById('phone').value;
-      const email = document.getElementById('email').value;
-
-      // Create an appointment object
-      const appointment = {
-        name,
-        phone,
-        email
-      };
-
-      // Add the appointment to the array
-      appointments.push(appointment);
-
-      // Clear the form fields
-      document.getElementById('name').value = '';
-      document.getElementById('phone').value = '';
-      document.getElementById('email').value = '';
-
-      // Call function to display appointments
-      displayAppointments();
-    }
-
-    // Function to display appointments
-    function displayAppointments() {
-      const appointmentsContainer = document.getElementById('appointments');
-      appointmentsContainer.innerHTML = '';
-
-      if (appointments.length === 0) {
-        appointmentsContainer.innerHTML = '<h3>No Appointments</h3>';
-        return;
-      }
-
-      const appointmentsList = document.createElement('ul');
-
-      appointments.forEach((appointment, index) => {
-        const listItem = document.createElement('li');
-        listItem.classList.add('appointment-item');
-
-        const appointmentInfo = document.createElement('span');
-        appointmentInfo.innerText = `Name: ${appointment.name}, Phone: ${appointment.phone}, Email: ${appointment.email}`;
-
-        const editButton = document.createElement('button');
-        editButton.innerText = 'Edit';
-        editButton.setAttribute('onclick', `editAppointment(${index})`);
-
-        const deleteButton = document.createElement('button');
-        deleteButton.innerText = 'Delete';
-        deleteButton.setAttribute('onclick', `deleteAppointment(${index})`);
-
-        listItem.appendChild(appointmentInfo);
-        listItem.appendChild(editButton);
-        listItem.appendChild(deleteButton);
-
-        appointmentsList.appendChild(listItem);
-      });
-
-      appointmentsContainer.appendChild(appointmentsList);
-    }
-
-    // Function to delete an appointment
-    function deleteAppointment(index) {
-      appointments.splice(index, 1);
-      displayAppointments();
-    }
-
-    // Function to edit an appointment
-    function editAppointment(index) {
-      const appointment = appointments[index];
-      document.getElementById('name').value = appointment.name;
-      document.getElementById('phone').value = appointment.phone;
-      document.getElementById('email').value = appointment.email;
-
-      appointments.splice(index, 1);
-      displayAppointments();
-    }
-  </script>
 </body>
 </html>

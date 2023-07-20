@@ -1,9 +1,29 @@
 const express = require('express');
 
+const path = require('path');
+
+const bodyParser = require('body-parser');
+
 const app = express();
 
-const home= require('./home');
+const cors = require('cors');
 
-app.use(home);
+app.use(cors());
 
-app.listen(3000);
+const sequelize = require('./util/database');
+
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
+
+const adminroutes= require('./routes/admin')
+
+app.use(adminroutes);
+
+sequelize
+  .sync()
+  .then(result => {
+    app.listen(3000);
+  })
+  .catch(err => {
+    console.log(err);
+  });
